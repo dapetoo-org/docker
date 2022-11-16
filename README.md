@@ -58,4 +58,12 @@ CREATE USER ''@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON * . * TO ''@'%';
 ### MySQL Client
 docker run --network tooling_app_network --name mysql-client -it --rm mysql mysql -h mysqlserverhost -u  -p 
 
+docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < create_user.sql 
+
 git clone https://github.com/darey-devops/tooling.git
+
+docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < tooling_db_schema.sql
+
+docker build -t tooling:0.0.1 .
+
+docker run --network tooling_app_network -p 8085:80 -it tooling:0.0.1 
