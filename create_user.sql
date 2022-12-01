@@ -1,4 +1,6 @@
-CREATE USER 'admin'@'mysqlserverhost' IDENTIFIED BY 'dapetoo';
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'mysqlserverhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
+CREATE USER ''@'%' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON * . * TO ''@'%';
+-- CREATE USER 'admin'@'localhost' IDENTIFIED BY 'dapetoo';
+-- GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+-- FLUSH PRIVILEGES;
 
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'dapetoo';

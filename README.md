@@ -67,3 +67,8 @@ docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < tooling_db_schema.sql
 docker build -t tooling:0.0.1 .
 
 docker run --network tooling_app_network -p 8085:80 -it tooling:0.0.1 
+
+docker run --name tooling-app --network tooling_app_network -p 8085:80 -it tooling:0.0.1 
+
+## Practice TASK
+git clone https://github.com/darey-devops/php-todo
