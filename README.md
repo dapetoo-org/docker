@@ -160,5 +160,14 @@ Structure of a Docker-compose file
 - healthcheck: healthcheck is used to configure a test for the container to check that it is still working. This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running.
 
 
-
-
+### Project Screenshots
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/01.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/02.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/03.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/04.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/05.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/06.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/07.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/08.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/09.png)
+![Screenshots](https://github.com/scholarship-task/docker/blob/main/screenshots/10.png)

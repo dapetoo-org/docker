@@ -39,7 +39,7 @@ pipeline {
                     sh "docker login -u ${env.username} -p ${env.password}"
                     echo "Login succeeded......."
                     
-                    sh "docker push dapetoo/tooling:${IMAGE_TAG}"
+                    // sh "docker push dapetoo/tooling:${IMAGE_TAG}"
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
                 echo "Clean the docker image on the Jenkins Build Server..."
                 withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
                     echo "Clean all docker images......."
-                    sh "docker rmi dapetoo/php-todo:${IMAGE_TAG}"
+                    // sh "docker rmi dapetoo/php-todo:${IMAGE_TAG}"
                 }
             }
         }
