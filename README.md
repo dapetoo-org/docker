@@ -81,4 +81,66 @@ docker build -t todo-app:1 .
 
 docker run --network tooling_app_network --name todo-app todo-app:1
 
+```
+
+https://github.com/scholarship-task/php-todo/blob/dapetoo-docker-build/
+
+
+
+### Practice Task 2
+
+```bash
+sudo apt install docker-compose 
+docker-compose version
+```
+
+tooling.yaml
+
+```
+version: "3.9"
+services:
+  tooling_frontend:
+    build: .
+    ports:
+      - "5000:80"
+    volumes:
+      - tooling_frontend:/var/www/html
+    links:
+      - db
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: <The database name required by Tooling app >
+      MYSQL_USER: <The user required by Tooling app >
+      MYSQL_PASSWORD: <The password required by Tooling app >
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  tooling_frontend:
+  db:
+```
+
+Run the docker-compose
+
+```bash 
+docker-compose -f tooling.yaml  up -d 
+docker compose ls
+```
+
+Structure of a Docker-compose file
+
+- Version: Top-level version property is defined by the specification for backward compatibility but is only informative. It is not used by the Docker Engine to determine the version of the Compose file format to use.
+
+- depends_on: depends_on expresses startup and shutdown dependencies between services.
+
+- build: build is used to build the image from the Dockerfile in the current directory(context).
+
+- environment: environment defines environment variables set in the container. environment can use either an array or a map. Any boolean values; true, false, yes, no, SHOULD be enclosed in quotes to ensure they are not converted to True or False by the YAML parser.
+
+
+
+
+
 
