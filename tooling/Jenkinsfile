@@ -26,7 +26,8 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernameColonPassword(credentialsId: '0749aa12-736c-4030-84cc-9251547326b4', variable: 'docker-password')]) {
-                        sh "docker build -t dapetoo/tooling:${IMAGE_TAG} -f tooling/Dockerfile ."                 
+                        sh "cd tooling/"
+                        sh "docker build -t dapetoo/tooling:${IMAGE_TAG} ."                 
                     }
                 }
             }
@@ -38,6 +39,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
                     sh "docker login -u ${env.username} -p ${env.password}"
                     echo "Login succeeded......."
+                    
                     sh "docker push dapetoo/tooling:${IMAGE_TAG}"
                 }
             }
