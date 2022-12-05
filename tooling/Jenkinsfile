@@ -17,7 +17,8 @@ pipeline {
   
     stage('Checkout Git') {
       steps {
-            git branch: '', credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker'
+        checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker']]])
+            // git branch: '', credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker'
       }
     }
       
