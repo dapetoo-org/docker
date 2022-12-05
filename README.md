@@ -139,7 +139,25 @@ Structure of a Docker-compose file
 
 - environment: environment defines environment variables set in the container. environment can use either an array or a map. Any boolean values; true, false, yes, no, SHOULD be enclosed in quotes to ensure they are not converted to True or False by the YAML parser.
 
+- volumes: volumes is used to mount host directories into the container.
 
+- expose: expose defines the ports that Compose implementations MUST expose from container. These ports MUST be accessible to linked services and SHOULD NOT be published to the host machine. Only the internal container ports can be specified.
+
+- ports: Exposes container ports. Port mapping MUST NOT be used with network_mode: host and doing so MUST result in a runtime error.
+
+- links: links is used to connect a service to another service. The service specified in links will be available at the hostname specified by the alias. The alias is optional and defaults to the name of the service.
+
+- restart: restart defines the behavior of the container when it exits. The default is no restart. restart can be one of no, on-failure, always, unless-stopped.
+
+- networks: networks is used to connect a service to a network. By default, services are connected to the default network which is created by Compose. To connect a service to a network that is not the default network, you must create the network first.
+
+- image: image is used to specify the image to use for the service. The image can be a name or an image ID. If the image is not present on the host, Compose attempts to pull it. If the image is present on the host, Compose does not attempt to pull it, unless you use the force-recreate option.
+
+- command: command is used to override the default command. The default command is specified in the image. If you specify a command, Compose does not run the default command.
+
+- entrypoint: entrypoint is used to override the default entrypoint. The default entrypoint is specified in the image. If you specify an entrypoint, Compose does not run the default entrypoint.
+
+- healthcheck: healthcheck is used to configure a test for the container to check that it is still working. This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running.
 
 
 
