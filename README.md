@@ -72,3 +72,13 @@ docker run --name tooling-app --network tooling_app_network -p 8085:80 -it tooli
 
 ## Practice TASK
 git clone https://github.com/darey-devops/php-todo
+
+```Dockerfile
+
+```
+
+docker build -t todo-app:1 .
+
+docker run --network tooling_app_network --name todo-app todo-app:1
+
+
