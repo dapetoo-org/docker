@@ -1,82 +1,139 @@
 pipeline {
-  agent any
+    agent any
+    
+    environment {
+        IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+    }
+
   stages {
 
-       stage('Building the software') {
-         steps {
-             echo 'Building the software'
-                    sh '''
-                    echo "Building the software"
-                    '''
-         }
-       }
-
-
-       stage('Unit Testing') {
-         steps {
-                    sh '''
-                    echo "Testing the software (Unit Testing)"
-                    '''
-
-                    sh '''
-                    echo "Step2"
-                    '''
-         }
-       }
-
-       stage('Quality Gate') {
-         steps {
-                    sh '''
-                    echo "Implementing Quality Gate Checks"
-                    '''
-         }
-       }
-
-
-       stage('Deploy to Dev environment') {
-        when { branch pattern: "^feature.*|^bug.*|^dev", comparator: "REGEXP"}
-         steps {
-                    sh '''
-                    echo "Deploying the software to Non-Production Environment only from Feature Branch"
-                    '''
-         }
-       }
-
-       stage('Trigger Upstream Piepline and Deploy to Integration environment') {
-                       when {
-                expression { BRANCH_NAME ==~ /(integration|develop|master)/ }
+     stage("Initial cleanup") {
+          steps {
+            dir("${WORKSPACE}") {
+              deleteDir()
             }
-         steps {
-                    sh '''
-                    echo "Deploying the software to Integration Environment from Develop branch for further integration tests"
-                    '''
-         }
-       }
-
-
-       stage('Trigger Upstream Piepline and Deploy to pre-production') {
-        when { buildingTag() }
-         steps {
-                    sh '''
-                    echo "Deploying the software to Production Environment from Master branch or a Git Tag"
-                    '''
-         }
-       }
-
-       stage('Trigger Upstream Piepline and Deploy to Production') {
-        when { buildingTag() }
-         steps {
-
-            script {
-              timeout(time: 10, unit: 'MINUTES') {
-                input(id: "Deploy Gate", message: "Deploy to production?", ok: 'Deploy')
-              }
+          }
         }
-                    sh '''
-                    echo "Deploying the software to Production Environment from Master branch or a Git Tag"
-                    '''
-         }
-       }
-
+  
+    stage('Checkout Git') {
+      steps {
+            git branch: '', credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker.git'
+      }
     }
+      
+    stage('build and login image') {
+            steps {
+                script {
+                    echo "building the docker image..."
+                    withCredentials([usernameColonPassword(credentialsId: '0749aa12-736c-4030-84cc-9251547326b4', variable: 'docker-password')]) {
+                        sh "docker build -t dapetoo/tooling:${IMAGE_TAG} ."                 
+                    }
+                }
+            }
+    }
+
+    stage('Docker Push') {
+            steps {
+                echo "Login to DockerHub and push the docker image..."
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh "docker login -u ${env.username} -p ${env.password}"
+                    echo "Login succeeded......."
+                    sh "docker push dapetoo/tooling:${IMAGE_TAG}"
+                }
+            }
+        }
+      
+    stage('Cleaning Docker Images') {
+            steps {
+                echo "Clean the docker image on the Jenkins Build Server..."
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    echo "Clean all docker images......."
+                    sh "docker rmi dapetoo/php-todo:${IMAGE_TAG}"
+                }
+            }
+        }
+  }
 }
+/
+/ pipeline {
+//   agent any
+//   stages {
+
+//        stage('Building the software') {
+//          steps {
+//              echo 'Building the software'
+//                     sh '''
+//                     echo "Building the software"
+//                     '''
+//          }
+//        }
+
+
+//        stage('Unit Testing') {
+//          steps {
+//                     sh '''
+//                     echo "Testing the software (Unit Testing)"
+//                     '''
+
+//                     sh '''
+//                     echo "Step2"
+//                     '''
+//          }
+//        }
+
+//        stage('Quality Gate') {
+//          steps {
+//                     sh '''
+//                     echo "Implementing Quality Gate Checks"
+//                     '''
+//          }
+//        }
+
+
+//        stage('Deploy to Dev environment') {
+//         when { branch pattern: "^feature.*|^bug.*|^dev", comparator: "REGEXP"}
+//          steps {
+//                     sh '''
+//                     echo "Deploying the software to Non-Production Environment only from Feature Branch"
+//                     '''
+//          }
+//        }
+
+//        stage('Trigger Upstream Piepline and Deploy to Integration environment') {
+//                        when {
+//                 expression { BRANCH_NAME ==~ /(integration|develop|master)/ }
+//             }
+//          steps {
+//                     sh '''
+//                     echo "Deploying the software to Integration Environment from Develop branch for further integration tests"
+//                     '''
+//          }
+//        }
+
+
+//        stage('Trigger Upstream Piepline and Deploy to pre-production') {
+//         when { buildingTag() }
+//          steps {
+//                     sh '''
+//                     echo "Deploying the software to Production Environment from Master branch or a Git Tag"
+//                     '''
+//          }
+//        }
+
+//        stage('Trigger Upstream Piepline and Deploy to Production') {
+//         when { buildingTag() }
+//          steps {
+
+//             script {
+//               timeout(time: 10, unit: 'MINUTES') {
+//                 input(id: "Deploy Gate", message: "Deploy to production?", ok: 'Deploy')
+//               }
+//         }
+//                     sh '''
+//                     echo "Deploying the software to Production Environment from Master branch or a Git Tag"
+//                     '''
+//          }
+//        }
+
+//     }
+// }
