@@ -18,7 +18,6 @@ pipeline {
     stage('Checkout Git') {
       steps {
         checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker']]])
-            // git branch: '', credentialsId: 'a0cfb614-7112-4f19-a952-d0fe685f7899', url: 'https://github.com/scholarship-task/docker'
       }
     }
       
@@ -27,7 +26,7 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernameColonPassword(credentialsId: '0749aa12-736c-4030-84cc-9251547326b4', variable: 'docker-password')]) {
-                        sh "docker build -t dapetoo/tooling:${IMAGE_TAG} ."                 
+                        sh "docker build -t dapetoo/tooling:${IMAGE_TAG} -f tooling/Dockerfile ."                 
                     }
                 }
             }
